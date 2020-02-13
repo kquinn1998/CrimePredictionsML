@@ -23,7 +23,7 @@ def dummyEncode(df):
 mlpc = pickle.load(open('neuralnet.sav', 'rb'))
 rfc = pickle.load(open('randomforest.sav', 'rb'))
 
-Xnew = [["01/05/2018 11:30:00 PM", False, False, "240"]]
+Xnew = [["01/05/2018 11:30:00 PM", True, False, "90D"]]
 le = LabelEncoder()
 sc = pickle.load(open('scaler.sav', 'rb'))
 
@@ -36,6 +36,10 @@ df = dummyEncode(df)
 
 df = sc.transform(df)
 
+print("Neural Network Prediction")
 pred_xnew = mlpc.predict(df)
+print(pred_xnew)
 
+print("Random Forest Prediction")
+pred_xnew = rfc.predict(df)
 print(pred_xnew)

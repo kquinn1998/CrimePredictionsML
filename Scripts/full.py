@@ -11,8 +11,8 @@ from sklearn.model_selection import train_test_split
 import pickle
 
 print("Importing \n")
-crimes = pd.read_csv('crimes.csv',sep=',',low_memory=False)
-crimes = crimes[:500000]
+crimes = pd.read_csv('crimes2018.csv',sep=',',low_memory=False)
+crimes = crimes[:50000]
 crimes = crimes.drop('ID',axis = 1)
 crimes = crimes.drop('Case Number',axis = 1)
 crimes = crimes.drop('District',axis = 1)
@@ -33,7 +33,7 @@ crimes = crimes.drop('Year',axis = 1)
 
 crimes = crimes.dropna()
 
-print("Data Reduction \n")
+print("Data Reduction")
 Dict = {'APARTMENT': 'RESIDENTIAL',
         'CHA APARTMENT': 'RESIDENTIAL',
         'CTA TRAIN': 'TRANSPORT',
@@ -165,19 +165,9 @@ Dict = {'APARTMENT': 'RESIDENTIAL',
         'STAIRWELL': 'OTHER',
         'HOSPITAL': 'GOVERNMENT',
         'CHA PARKING LOT' : 'GOVERNMENT',
-        'GANGWAY': 'OTHER',
-        'DELIVERY TRUCK' : 'TRANSPORT',
-        'VEHICLE - OTHER RIDE SERVICE': 'TRANSPORT',
-        'RAILROAD PROPERTY': 'TRANSPORT',
-        'CTA "L" PLATFORM': 'TRANSPORT',
-        'TRAILER': 'TRANSPORT',
-        'SCHOOL YARD': 'SCHOOL',
-        'CTA SUBWAY STATION': 'TRANSPORT',
-        'CHA HALLWAY': 'GOVERNMENT',
-        'WOODED AREA': 'OTHER'}
+        'GANGWAY': 'OTHER'}
 
 for index, row in crimes.iterrows():
-    print(index)
     crimes.loc[index, 'Location Description'] = Dict[crimes.loc[index, 'Location Description']];
 
 le = LabelEncoder()
@@ -203,13 +193,13 @@ X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
 #Neural Network
-print("Creating Neural Network")
-mlpc = MLPClassifier(hidden_layer_sizes = (11,11,11), max_iter = 1000)
+print("Neural Network Creation")
+mlpc = MLPClassifier(hidden_layer_sizes = (5,5,5), max_iter = 1000)
 mlpc.fit(X_train, y_train)
 pred_mlpc = mlpc.predict(X_test)
 
 #Random Forest
-print("Creating Random Forest")
+print("Random Forest Creation")
 rfc = RandomForestClassifier(n_estimators = 100, random_state = 42)
 rfc.fit(X_train, y_train)
 pred_rfc = rfc.predict(X_test)
@@ -227,11 +217,21 @@ print(confusion_matrix(y_test, pred_rfc))
 print(accuracy_score(y_test, pred_rfc))
 sns.countplot(pred_rfc)
 
-#Export Model
-filenameOne = "neuralnet.sav"
-filenameTwo = "randomforest.sav"
-filenameThree = "scaler.sav"
+#prediction
+Xnew = [["01/05/2018 11:30:00 PM", False, False, "200"]]
+df=pd.DataFrame(Xnew, columns=['Date',
+                               'Arrest', 
+                               'Domestic',
+                               'FBI Code'])
 
-pickle.dump(mlpc, open(filenameOne, 'wb'))
-pickle.dump(rfc, open(filenameTwo, 'wb'))
-pickle.dump(sc, open(filenameThree, 'wb'))
+df = dummyEncode(df)
+
+df = sc.transform(df)
+
+print("Neural Network Prediction")
+pred_xnew = mlpc.predict(df)
+print(pred_xnew)
+
+print("Random Forest Prediction")
+pred_xnew = rfc.predict(df)
+print(pred_xnew)
