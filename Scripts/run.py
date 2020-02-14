@@ -1,3 +1,6 @@
+#Authors: Kevin Quinn / Samuel Orekoya
+#Purpose: This file is to be used with the setup.py file to run the exported models with a prediction
+
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt

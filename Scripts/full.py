@@ -1,3 +1,6 @@
+#Authors: Kevin Quinn / Samuel Orekoya
+#Purpose: This file does a complete run of the process making the model from the dataset then running it.
+
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -165,7 +168,16 @@ Dict = {'APARTMENT': 'RESIDENTIAL',
         'STAIRWELL': 'OTHER',
         'HOSPITAL': 'GOVERNMENT',
         'CHA PARKING LOT' : 'GOVERNMENT',
-        'GANGWAY': 'OTHER'}
+        'GANGWAY': 'OTHER',
+        'DELIVERY TRUCK' : 'TRANSPORT',
+        'VEHICLE - OTHER RIDE SERVICE': 'TRANSPORT',
+        'RAILROAD PROPERTY': 'TRANSPORT',
+        'CTA "L" PLATFORM': 'TRANSPORT',
+        'TRAILER': 'TRANSPORT',
+        'SCHOOL YARD': 'SCHOOL',
+        'CTA SUBWAY STATION': 'TRANSPORT',
+        'CHA HALLWAY': 'GOVERNMENT',
+        'WOODED AREA': 'OTHER'}
 
 for index, row in crimes.iterrows():
     crimes.loc[index, 'Location Description'] = Dict[crimes.loc[index, 'Location Description']];

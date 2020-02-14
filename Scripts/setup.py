@@ -1,3 +1,6 @@
+#Authors: Kevin Quinn / Samuel Orekoya
+#Purpose: This file is to be used with the run.py file. This file takes in the dataset processes it places it into a model which is then exported
+
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
